@@ -37,6 +37,27 @@ def is_likely_latex(text):
     return False
 
 
+def post_process_typst_output(typst_text):
+    """   
+    Pandoc converts () and [] to \(\) and \[\] to eliminate ambiguity,
+    but regular parentheses work fine.
+    """
+    if not typst_text:
+        return typst_text
+
+    processed_text = typst_text
+
+    # Replace \( and \) with ( and )
+    processed_text = re.sub(r"\\(\()", r"(", processed_text)
+    processed_text = re.sub(r"\\(\))", r")", processed_text)
+
+    # Replace \[ and \] with [ and ]
+    processed_text = re.sub(r"\\(\[)", r"[", processed_text)
+    processed_text = re.sub(r"\\(\])", r"]", processed_text)
+
+    return processed_text
+
+
 def convert_latex_to_typst(latex_input):
     """
     Converts a LaTeX string to Typst using Pandoc.
@@ -116,6 +137,9 @@ def main():
                     typst_output = convert_latex_to_typst(latex_input)
 
                     if typst_output is not None:
+                        # Post-process the Typst output to clean up escaped characters
+                        # Should it cause issues, comment this line out.
+                        typst_output = post_process_typst_output(typst_output)
                         try:
                             pyperclip.copy(typst_output)
                             print("   Typst output copied to clipboard.")
