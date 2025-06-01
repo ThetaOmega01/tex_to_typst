@@ -168,19 +168,19 @@ def convert_latex_to_typst(latex_input):
 
 
 def main():
-    print("Smart Auto Mathpix LaTeX to Typst Converter is RUNNING...")
-    print(f"Monitoring clipboard every {POLL_INTERVAL_SECONDS} seconds.")
-    print("Will only process content recognized as LaTeX.")
-    print("Press Ctrl+C to stop the script.")
-    print("-" * 60)
+    print("  Smart Auto Mathpix LaTeX to Typst Converter is RUNNING...")
+    print(f"  Monitoring clipboard every {POLL_INTERVAL_SECONDS} seconds.")
+    print("  Will only process content recognized as LaTeX.")
+    print("  Press Ctrl+C to stop the script.")
+    print("  " + "-" * 56)
 
     last_clipboard_content = ""
     try:
         # Initialize with current clipboard content to avoid processing it on first run
         last_clipboard_content = pyperclip.paste()
     except pyperclip.PyperclipException as e:
-        print(f"[Warning] Could not read initial clipboard content: {e}")
-        print("         Make sure you have a clipboard manager installed.")
+        print(f"  [Warning] Could not read initial clipboard content: {e}")
+        print("           Make sure you have a clipboard manager installed.")
 
     while True:
         try:
@@ -192,7 +192,7 @@ def main():
                 and current_clipboard_content != last_clipboard_content
             ):
                 timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-                print(f"\nNew clipboard content detected at {timestamp}:")
+                print(f"\n  New clipboard content detected at {timestamp}:")
 
                 # Display a snippet for brevity
                 snippet = (
@@ -201,11 +201,11 @@ def main():
                     else current_clipboard_content
                 )
                 print(
-                    f"   '{snippet.replace(chr(10), ' ')}'"
+                    f"    '{snippet.replace(chr(10), ' ')}'"
                 )  # Replace newlines for compact display
 
                 if is_likely_latex(current_clipboard_content):
-                    print("   Recognized as likely LaTeX. Processing...")
+                    print("    Recognized as likely LaTeX. Processing...")
                     latex_input = current_clipboard_content
 
                     typst_output = convert_latex_to_typst(latex_input)
@@ -216,7 +216,7 @@ def main():
                         typst_output = post_process_typst_output(typst_output)
                         try:
                             pyperclip.copy(typst_output)
-                            print("   Typst output copied to clipboard.")
+                            print("    Typst output copied to clipboard.")
                             typst_snippet = (
                                 (typst_output[:150] + "...")
                                 if len(typst_output) > 150
@@ -228,7 +228,7 @@ def main():
                             last_clipboard_content = typst_output  # Update with our output to prevent re-processing
                         except pyperclip.PyperclipException as e:
                             print(
-                                f"   [Warning] Could not copy Typst to clipboard: {e}"
+                                f"    [Warning] Could not copy Typst to clipboard: {e}"
                             )
                             # If copy fails, keep last_clipboard_content as current_clipboard_content
                             # to avoid repeatedly trying to process the same LaTeX input if it's stuck.
@@ -238,7 +238,7 @@ def main():
                         # Update last_clipboard_content to avoid re-processing faulty LaTeX
                         last_clipboard_content = current_clipboard_content
                 else:
-                    print("   Not recognized as LaTeX. Skipping conversion.")
+                    print("    Not recognized as LaTeX. Skipping conversion.")
                     last_clipboard_content = current_clipboard_content  # Update to prevent re-evaluating non-LaTeX
 
             # If clipboard content changed (e.g., cleared, or became something already processed/skipped)
@@ -249,16 +249,16 @@ def main():
             time.sleep(POLL_INTERVAL_SECONDS)
 
         except pyperclip.PyperclipException as e:
-            print(f"\n[Clipboard Error] Could not access the clipboard: {e}")
-            print("Make sure you have a clipboard manager installed.")
-            print(f"Retrying in {POLL_INTERVAL_SECONDS * 5} seconds...")
+            print(f"\n  [Clipboard Error] Could not access the clipboard: {e}")
+            print("  Make sure you have a clipboard manager installed.")
+            print(f"  Retrying in {POLL_INTERVAL_SECONDS * 5} seconds...")
             time.sleep(POLL_INTERVAL_SECONDS * 5)
         except KeyboardInterrupt:
-            print("\n\nScript stopped by user.")
+            print("\n\n  Script stopped by user.")
             break
         except Exception as e:
-            print(f"\n[Unexpected Error] An error occurred: {e}")
-            print(f"Retrying in {POLL_INTERVAL_SECONDS * 2} seconds...")
+            print(f"\n  [Unexpected Error] An error occurred: {e}")
+            print(f"  Retrying in {POLL_INTERVAL_SECONDS * 2} seconds...")
             time.sleep(POLL_INTERVAL_SECONDS * 2)
 
 
