@@ -66,7 +66,7 @@ def preprocess_latex_input(latex_input):
     """
     Preprocesses LaTeX input to ensure proper math delimiters for Pandoc conversion.
     If the input contains LaTeX math commands but no delimiters, wraps it in $$ delimiters.
-    Returns a tuple: (processed_input, is_raw_latex_flag)
+    Returns a tuple: (processed_input, is_raw_math_flag)
     """
     if not latex_input or not isinstance(latex_input, str):
         return latex_input, False
