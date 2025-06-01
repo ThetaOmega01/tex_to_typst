@@ -135,7 +135,7 @@ def convert_latex_to_typst(latex_input):
     """
     try:
         # Preprocess the input to ensure proper math delimiters
-        processed_input, is_raw_latex = preprocess_latex_input(latex_input)
+        processed_input, is_raw_math = preprocess_latex_input(latex_input)
         
         pandoc_command = ["pandoc", "-f", "latex", "-t", "typst"]
         process = subprocess.Popen(
@@ -156,7 +156,7 @@ def convert_latex_to_typst(latex_input):
             return None
 
         # Post-process with the raw LaTeX flag
-        return post_process_typst_output(typst_output, is_raw_latex)
+        return post_process_typst_output(typst_output, is_raw_math)
 
     except FileNotFoundError:
         print("[Error] Pandoc command not found.")
