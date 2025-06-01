@@ -24,4 +24,4 @@ uv run tex_to_typst.py
 
 Copy LaTeX content to clipboard - it will automatically be converted to Typst and replace the current clipboard.
 
-It can be used with mathpix for image to typst workflow.
+It can be used with common LaTeX OCR tools for image to typst workflow.
